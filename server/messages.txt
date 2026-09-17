@@ -1,0 +1,42 @@
+---
+Date : 17/09/2026 16:49
+Question : Comment avez-vous commencé dans ce domaine ?
+
+---
+
+---
+Date : 17/09/2026 17:01
+Question : je t'aime richard
+
+---
+
+---
+Date : 17/09/2026 17:02
+Question : I love you
+
+---
+
+---
+Date : 17/09/2026 17:05
+Question : je t'aime
+
+---
+
+---
+Date : 17/09/2026 17:08
+Question : Test visuel : le message est bien enregistré dans le fichier.
+
+---
+
+---
+Date : 17/09/2026 17:09
+Question : salut je t'aime
+
+---
+
+---
+Date : 17/09/2026 17:16
+Question : Test récupération distante : ceci doit apparaître dans le fichier.
+
+---
+
