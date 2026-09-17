@@ -40,3 +40,15 @@ Question : Test récupération distante : ceci doit apparaître dans le fichier.
 
 ---
 
+---
+Date : 17/09/2026 17:40
+Question : je t'aime
+
+---
+
+---
+Date : 17/09/2026 17:44
+Question : tu me plait
+
+---
+

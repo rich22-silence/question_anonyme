@@ -3,6 +3,7 @@ import cors from 'cors'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { put, get } from '@vercel/blob'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -30,6 +31,76 @@ app.get('/api/messages', (req, res) => {
   } catch (error) {
     console.error('Erreur lors de la lecture du fichier :', error)
     res.status(500).json({ message: 'Impossible de lire les messages.' })
+  }
+})
+
+app.get('/api/messages/download', (req, res) => {
+  try {
+    // Force download of the messages.txt file
+    res.download(messagesPath, 'messages.txt', (err) => {
+      if (err) {
+        console.error('Erreur lors du téléchargement du fichier :', err)
+        if (!res.headersSent) {
+          res.status(500).json({ message: "Impossible de télécharger les messages." })
+        }
+      }
+    })
+  } catch (error) {
+    console.error('Erreur lors de la préparation du téléchargement :', error)
+    res.status(500).json({ message: 'Erreur serveur.' })
+  }
+})
+
+app.post('/api/avatar/upload', express.raw({ type: '*/*', limit: '10mb' }), async (req, res) => {
+  try {
+    const filename = req.query.filename || req.headers['x-filename']
+    if (!filename) {
+      return res.status(400).json({ message: 'Missing filename' })
+    }
+
+    const result = await put(filename, req.body, { access: 'private' })
+
+    return res.status(200).json(result)
+  } catch (error) {
+    console.error('Erreur lors de l’envoi du blob :', error)
+    return res.status(500).json({ message: 'Erreur lors de l’envoi du fichier.' })
+  }
+})
+
+app.get('/api/avatar/view', async (req, res) => {
+  try {
+    const pathname = req.query.pathname
+    if (!pathname) return res.status(400).json({ error: 'Missing pathname' })
+
+    const result = await get(pathname, { access: 'private' })
+    if (result?.statusCode !== 200) {
+      return res.status(404).send('Not found')
+    }
+
+    const contentType = result.blob?.contentType || 'application/octet-stream'
+    res.setHeader('Content-Type', contentType)
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+
+    // result.stream may be a Node ReadableStream or a web ReadableStream
+    const stream = result.stream
+    if (!stream) {
+      return res.status(500).json({ message: 'No stream available' })
+    }
+
+    if (typeof stream.pipe === 'function') {
+      stream.pipe(res)
+    } else if (typeof stream.getReader === 'function') {
+      // convert web ReadableStream to async iterable and pipe
+      const { Readable } = await import('stream')
+      const nodeStream = Readable.from(stream)
+      nodeStream.pipe(res)
+    } else {
+      // fallback: send as-is
+      res.send(stream)
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération du blob :', error)
+    return res.status(500).json({ message: 'Erreur lors de la récupération du fichier.' })
   }
 })
 
