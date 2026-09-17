@@ -19,11 +19,15 @@ export default async function handler(req, res) {
       }
 
       const text = await streamToString(result.stream)
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+
       if (download) {
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8')
         res.setHeader('Content-Disposition', 'attachment; filename="messages.txt"')
+        return res.status(200).send(text)
       }
-      return res.status(200).send(text)
+
+      // Default: return JSON to avoid client-side JSON parse errors
+      return res.status(200).json({ content: text })
     }
 
     if (req.method === 'POST') {
