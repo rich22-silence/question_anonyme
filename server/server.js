@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename)
 const messagesPath = path.join(__dirname, 'messages.txt')
 
 const app = express()
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 if (!fs.existsSync(messagesPath)) {
   fs.writeFileSync(messagesPath, '', 'utf8')

@@ -1,16 +1,61 @@
-# React + Vite
+# Question anonyme
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application simple de questions anonymes avec React + Vite + Express.
 
-Currently, two official plugins are available:
+## Lancer localement
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+Le frontend est servi sur :
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```text
+http://localhost:5173
+```
 
-## Expanding the ESLint configuration
+Le backend est servi sur :
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+http://localhost:3001
+```
+
+## Déploiement
+
+### Backend (Render / Railway / VPS)
+
+- Déployer le dossier racine
+- Exécuter :
+
+```bash
+npm install
+npm start
+```
+
+Le serveur écoute sur `PORT` si défini, sinon sur `3001`.
+
+### Frontend (Vercel)
+
+Dans les variables d’environnement Vercel, ajouter :
+
+```env
+VITE_API_URL=https://ton-backend-url/api
+```
+
+### Route pour récupérer les messages
+
+Le backend expose :
+
+```text
+GET /api/messages
+```
+
+Cette route lit directement le fichier `server/messages.txt`.
+
+## Structure
+
+- `src/` : frontend React
+- `server/server.js` : backend Express
+- `server/messages.txt` : stockage des questions
+
